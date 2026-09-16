@@ -1,46 +1,324 @@
 <!doctype html>
-<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin GAE Luwih Rental</title><style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}header{background:#111827;color:#fff;padding:22px 16px}.wrap{max-width:1100px;margin:auto}main{padding:22px 16px}.login,.panel,.stat{background:#fff;border-radius:16px;padding:20px;box-shadow:0 4px 18px #0000000d;margin-bottom:18px}input,select{width:100%;padding:11px;margin:6px 0 12px;border:1px solid #d1d5db;border-radius:9px}button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:pointer;background:#111827;color:#fff}.secondary{background:#e5e7eb;color:#111827}.danger{background:#dc2626}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.vehicle{border:1px solid #e5e7eb;border-radius:12px;padding:14px}.muted{color:#687386;font-size:13px}.ok{color:#16803a;font-weight:bold}.busy{color:#b91c1c;font-weight:bold}.hidden{display:none}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:10px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-align:top}@media(max-width:650px){.row{grid-template-columns:1fr}table{display:block;overflow:auto;white-space:nowrap}}
-</style><style>.langbar{position:fixed;right:12px;top:10px;z-index:9999}.langbar select{padding:8px 10px;border:1px solid #ddd;border-radius:10px;background:#fff;font-weight:700;max-width:145px}</style></head>
-<body><div class="langbar"><select id="languageSelect" aria-label="Language">
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GAE Luwih Rental — Admin</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--text:#172033;--muted:#687386;--primary:#111827;--line:#e5e7eb;--green:#16803a;--red:#b91c1c;--amber:#a16207;--blue:#1d4ed8}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+header{background:linear-gradient(135deg,#111827,#263449);color:#fff;padding:24px 16px}
+.wrap{max-width:1150px;margin:auto}
+header h1{margin:0;font-size:28px} header p{margin:7px 0 0;color:#d7dce5}
+.langbar{position:fixed;right:12px;top:10px;z-index:1000}
+.langbar select{padding:8px 10px;border:1px solid #ddd;border-radius:10px;background:#fff;font-weight:700;max-width:150px}
+main{padding:22px 16px}
+.card,.panel,.login{background:var(--card);border-radius:16px;padding:18px;box-shadow:0 4px 18px #0000000b;margin-bottom:18px}
+.hidden{display:none!important}
+.topbar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+button{border:0;border-radius:9px;padding:10px 13px;font-weight:700;cursor:pointer;background:var(--primary);color:#fff}
+button.secondary{background:#e5e7eb;color:#111827}
+button.danger{background:#dc2626}
+button.green{background:#16803a}
+button.blue{background:#1d4ed8}
+button:disabled{opacity:.5;cursor:not-allowed}
+input,select,textarea{width:100%;padding:11px;border:1px solid #d1d5db;border-radius:9px;background:#fff}
+textarea{min-height:80px;resize:vertical}
+label{display:block;font-weight:700;margin-bottom:6px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px}
+.stat .num{font-size:27px;font-weight:800;margin-top:5px}
+.muted{color:var(--muted);font-size:13px}
+.ok{color:var(--green);font-weight:700}.busy{color:var(--red);font-weight:700}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800;background:#eef2ff;color:#3730a3}
+.badge.new{background:#fef3c7;color:#92400e}.badge.confirmed{background:#dcfce7;color:#166534}.badge.completed{background:#dbeafe;color:#1e40af}.badge.cancelled{background:#fee2e2;color:#991b1b}
+.tabs{display:flex;gap:7px;overflow:auto;margin:0 0 18px}
+.tabs button{white-space:nowrap;background:#e5e7eb;color:#111827}.tabs button.on{background:#111827;color:#fff}
+.vehicle{border:1px solid var(--line);border-radius:13px;padding:14px}
+.vehicle h3{margin:0 0 7px}
+.vehicle .price{font-weight:800;font-size:18px;margin:8px 0}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:900px}
+th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:#f8fafc;position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+.smallbtn{padding:7px 9px;font-size:12px;margin:2px 0}
+.modal{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:16px;z-index:2000}
+.modalbox{background:#fff;border-radius:16px;max-width:650px;width:100%;max-height:90vh;overflow:auto;padding:20px}
+hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+.notice{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:12px;color:#7c2d12;font-size:13px}
+@media(max-width:700px){
+ .row,.row3,.filters{grid-template-columns:1fr}
+ header h1{font-size:24px}
+ main{padding:16px 10px}
+ .topbar{align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="langbar">
+<select id="languageSelect" aria-label="Language">
 <option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option><option value="zh">🇨🇳 中文</option>
 <option value="ja">🇯🇵 日本語</option><option value="ko">🇰🇷 한국어</option><option value="de">🇩🇪 Deutsch</option>
-<option value="fr">🇫🇷 Français</option><option value="es">🇪🇸 Español</option></select></div><header><div class="wrap"><h1>GAE LUWIH — ADMIN</h1><p>Kelola kendaraan dan booking</p></div></header>
+<option value="fr">🇫🇷 Français</option><option value="es">🇪🇸 Español</option>
+</select>
+</div>
+
+<header><div class="wrap"><h1>GAE LUWIH RENTAL — ADMIN</h1><p id="headerSub">Kelola kendaraan, booking, dan ringkasan usaha</p></div></header>
+
 <main class="wrap">
-<section id="login" class="login"><h2>🔐 Login Admin</h2><p class="muted">Demo lokal: password default <b>gaeluwih</b>. Ganti password di bagian pengaturan setelah masuk. Untuk penggunaan online, autentikasi backend/database wajib dipasang.</p><input id="pass" type="password" placeholder="Password"><button onclick="login()">Masuk</button><p id="err" style="color:#b91c1c"></p></section>
+<section id="login" class="login">
+<h2 id="loginTitle">🔐 Login Admin</h2>
+<p class="muted" id="loginInfo">Password demo default: <b>gaeluwih</b>. Halaman ini masih menggunakan penyimpanan browser (localStorage), bukan database online.</p>
+<label id="passwordLabel">Password</label>
+<input id="pass" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')login()">
+<br><br><button onclick="login()" id="loginBtn">Masuk</button>
+<p id="err" style="color:#b91c1c"></p>
+</section>
+
 <section id="app" class="hidden">
-<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:18px"><h2>Dashboard</h2><div><a href="index.html"><button class="secondary">Lihat Website</button></a> <button onclick="logout()" class="danger">Keluar</button></div></div>
+<div class="topbar" style="margin-bottom:15px">
+<div><h2 id="dashboardTitle" style="margin:0">Dashboard</h2><span class="muted" id="lastUpdated"></span></div>
+<div class="actions">
+<a href="index.html"><button class="secondary" id="siteBtn">🌐 Website</button></a>
+<button class="secondary" onclick="refreshData()" id="refreshBtn">↻ Refresh</button>
+<button class="danger" onclick="logout()" id="logoutBtn">Keluar</button>
+</div>
+</div>
+
+<div class="tabs">
+<button class="on" id="tabDashboard" onclick="switchTab('dashboard')">📊 Dashboard</button>
+<button id="tabBookings" onclick="switchTab('bookings')">📋 Booking</button>
+<button id="tabVehicles" onclick="switchTab('vehicles')">🚗 Kendaraan</button>
+<button id="tabSettings" onclick="switchTab('settings')">⚙️ Pengaturan</button>
+</div>
+
+<section id="dashboardSection">
 <div id="stats" class="grid"></div>
-<section class="panel"><h2>🚗🛵 Kendaraan</h2><div id="vehicles" class="grid"></div>
-<h3>Tambah kendaraan</h3><div class="row"><input id="newName" placeholder="Nama kendaraan"><input id="newPrice" type="number" placeholder="Harga"></div><div class="row"><select id="newType"><option value="car">Mobil (harian)</option><option value="bike">Motor (bulanan)</option></select><select id="newStatus"><option>Tersedia</option><option>Disewa</option></select></div><button onclick="addVehicle()">Tambah</button></section>
-<section class="panel"><h2>📋 Booking</h2><div id="bookings"></div></section>
-<section class="panel"><h2>⚙️ Pengaturan</h2><p class="muted">Password demo disimpan lokal di browser ini. Jangan gunakan cara ini untuk website produksi.</p><div class="row"><input id="oldPass" type="password" placeholder="Password lama"><input id="newPass" type="password" placeholder="Password baru"></div><button onclick="changePass()">Ganti Password</button> <button class="danger" onclick="clearBookings()">Hapus Semua Booking</button></section>
-</section></main>
+<div class="panel">
+<div class="topbar"><h3 id="recentTitle" style="margin:0">Booking terbaru</h3><button class="secondary" onclick="switchTab('bookings')" id="allBookingsBtn">Lihat semua</button></div>
+<div id="recentBookings"></div>
+</div>
+<div class="panel">
+<h3 id="summaryTitle">Ringkasan kendaraan</h3>
+<div id="vehicleSummary" class="grid"></div>
+</div>
+</section>
+
+<section id="bookingsSection" class="hidden">
+<div class="panel">
+<div class="topbar"><h3 id="bookingTitle" style="margin:0">Manajemen Booking</h3><button class="blue" onclick="exportCSV()" id="exportBtn">⬇ Export CSV</button></div>
+<br>
+<div class="filters">
+<input id="searchBooking" placeholder="Cari nama, WhatsApp, kendaraan..." oninput="renderBookings()">
+<select id="filterStatus" onchange="renderBookings()">
+<option value="all">Semua status</option><option value="new">Baru</option><option value="confirmed">Dikonfirmasi</option><option value="completed">Selesai</option><option value="cancelled">Dibatalkan</option>
+</select>
+<select id="filterType" onchange="renderBookings()">
+<option value="all">Semua kendaraan</option><option value="car">Mobil</option><option value="bike">Motor</option>
+</select>
+</div>
+<div id="bookings"></div>
+</div>
+</section>
+
+<section id="vehiclesSection" class="hidden">
+<div class="panel">
+<div class="topbar"><h3 id="vehicleTitle" style="margin:0">Manajemen Kendaraan</h3><button class="green" onclick="openAddVehicle()" id="addVehicleBtn">＋ Tambah kendaraan</button></div>
+<br>
+<div id="vehicles" class="grid"></div>
+</div>
+</section>
+
+<section id="settingsSection" class="hidden">
+<div class="panel">
+<h3 id="passwordTitle">🔐 Ganti Password Admin</h3>
+<div class="row">
+<div><label>Password lama</label><input id="oldPass" type="password"></div>
+<div><label>Password baru</label><input id="newPass" type="password"></div>
+</div>
+<button onclick="changePass()" id="changePassBtn">Ganti Password</button>
+</div>
+<div class="panel">
+<h3 id="dataTitle">💾 Data Booking</h3>
+<p class="muted" id="dataInfo">Gunakan backup sebelum menghapus data. Backup menyimpan data kendaraan dan booking dalam file JSON.</p>
+<div class="actions">
+<button class="blue" onclick="backupJSON()" id="backupBtn">⬇ Backup JSON</button>
+<label style="display:inline-block;margin:0"><input id="restoreFile" type="file" accept=".json" onchange="restoreJSON(event)" style="display:none"><button class="secondary" onclick="document.getElementById('restoreFile').click()" id="restoreBtn">⬆ Restore JSON</button></label>
+<button class="danger" onclick="clearBookings()" id="clearBtn">Hapus Semua Booking</button>
+</div>
+</div>
+<div class="notice" id="productionNotice">Catatan: versi ini memakai localStorage browser. Artinya data admin/booking belum tersimpan di server dan belum otomatis tersinkron antar HP/perangkat. Untuk operasional nyata multi-admin, kita perlu database + autentikasi backend.</div>
+</section>
+</section>
+</main>
+
+<div id="modal" class="modal hidden">
+<div class="modalbox">
+<div class="topbar"><h3 id="modalTitle" style="margin:0">Edit Booking</h3><button class="secondary" onclick="closeModal()">✕</button></div>
+<hr>
+<div id="modalBody"></div>
+</div>
+</div>
+
 <script>
-const KEY="gae_luwih_data_v1",PASSKEY="gae_luwih_admin_pass";
-const defaults={cars:[{id:"car1",name:"Toyota Raize GR",price:350000,status:"Tersedia"},{id:"car2",name:"Honda Brio",price:300000,status:"Tersedia"},{id:"car3",name:"Toyota Agya / Daihatsu Ayla",price:250000,status:"Tersedia"},{id:"car4",name:"Toyota New Avanza",price:400000,status:"Tersedia"},{id:"car5",name:"Toyota Fortuner TRD VRZ",price:700000,status:"Tersedia"}],bikes:[{id:"bike1",name:"Yamaha NMAX Turbo",price:2000000,status:"Tersedia"},{id:"bike2",name:"Yamaha NMAX Neo S",price:1800000,status:"Tersedia"},{id:"bike3",name:"Yamaha X-Max ABS",price:3000000,status:"Tersedia"}],bookings:[]};
-function data(){try{return JSON.parse(localStorage.getItem(KEY))||defaults}catch(e){return defaults}}function save(d){localStorage.setItem(KEY,JSON.stringify(d))}
-function rp(n){return new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(n)}
-function login(){const p=document.getElementById("pass").value;if(p===(localStorage.getItem(PASSKEY)||"gaeluwih")){sessionStorage.setItem("gae_admin","1");show()}else document.getElementById("err").textContent="Password salah."}
-function show(){document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");render()}
+const KEY="gae_luwih_data_v1", PASSKEY="gae_luwih_admin_pass";
+const defaults={
+cars:[
+{id:"car1",name:"Toyota Raize GR",price:350000,status:"Tersedia"},
+{id:"car2",name:"Honda Brio",price:300000,status:"Tersedia"},
+{id:"car3",name:"Toyota Agya / Daihatsu Ayla",price:250000,status:"Tersedia"},
+{id:"car4",name:"Toyota New Avanza",price:400000,status:"Tersedia"},
+{id:"car5",name:"Toyota Fortuner TRD VRZ",price:700000,status:"Tersedia"}],
+bikes:[
+{id:"bike1",name:"Yamaha NMAX Turbo",price:2000000,status:"Tersedia"},
+{id:"bike2",name:"Yamaha NMAX Neo S",price:1800000,status:"Tersedia"},
+{id:"bike3",name:"Yamaha X-Max ABS",price:3000000,status:"Tersedia"}],
+bookings:[]
+};
+
+const LANGS={
+id:{sub:"Kelola kendaraan, booking, dan ringkasan usaha",login:"🔐 Login Admin",loginInfo:"Password demo default: gaeluwih. Halaman ini masih menggunakan penyimpanan browser (localStorage), bukan database online.",password:"Password",enter:"Masuk",dashboard:"Dashboard",site:"🌐 Website",refresh:"↻ Refresh",logout:"Keluar",dashTab:"📊 Dashboard",bookTab:"📋 Booking",vehTab:"🚗 Kendaraan",setTab:"⚙️ Pengaturan",recent:"Booking terbaru",all:"Lihat semua",summary:"Ringkasan kendaraan",manageBook:"Manajemen Booking",export:"⬇ Export CSV",search:"Cari nama, WhatsApp, kendaraan...",allStatus:"Semua status",allVehicles:"Semua kendaraan",cars:"Mobil",bikes:"Motor",new:"Baru",confirmed:"Dikonfirmasi",completed:"Selesai",cancelled:"Dibatalkan",manageVeh:"Manajemen Kendaraan",addVeh:"＋ Tambah kendaraan",changePass:"🔐 Ganti Password Admin",oldPass:"Password lama",newPass:"Password baru",change:"Ganti Password",data:"💾 Data Booking",dataInfo:"Gunakan backup sebelum menghapus data. Backup menyimpan data kendaraan dan booking dalam file JSON.",backup:"⬇ Backup JSON",restore:"⬆ Restore JSON",clear:"Hapus Semua Booking",notice:"Catatan: versi ini memakai localStorage browser. Artinya data admin/booking belum tersimpan di server dan belum otomatis tersinkron antar HP/perangkat. Untuk operasional nyata multi-admin, kita perlu database + autentikasi backend.",available:"Tersedia",rented:"Disewa",edit:"Edit",delete:"Hapus",wa:"WhatsApp",status:"Status",type:"Jenis",price:"Harga",actions:"Aksi",name:"Nama",phone:"WhatsApp",vehicle:"Kendaraan",period:"Periode",total:"Total",created:"Dibuat",noBooking:"Belum ada booking.",save:"Simpan",cancel:"Batal",add:"Tambah",vehicleName:"Nama kendaraan",vehiclePrice:"Harga",vehicleStatus:"Status",bookingEdit:"Edit Booking",notes:"Catatan admin"},
+en:{sub:"Manage vehicles, bookings, and business summary",login:"🔐 Admin Login",loginInfo:"Demo default password: gaeluwih. This page still uses browser storage (localStorage), not an online database.",password:"Password",enter:"Sign in",dashboard:"Dashboard",site:"🌐 Website",refresh:"↻ Refresh",logout:"Log out",dashTab:"📊 Dashboard",bookTab:"📋 Bookings",vehTab:"🚗 Vehicles",setTab:"⚙️ Settings",recent:"Recent bookings",all:"View all",summary:"Vehicle summary",manageBook:"Booking management",export:"⬇ Export CSV",search:"Search name, WhatsApp, vehicle...",allStatus:"All statuses",allVehicles:"All vehicles",cars:"Cars",bikes:"Motorcycles",new:"New",confirmed:"Confirmed",completed:"Completed",cancelled:"Cancelled",manageVeh:"Vehicle management",addVeh:"＋ Add vehicle",changePass:"🔐 Change Admin Password",oldPass:"Old password",newPass:"New password",change:"Change Password",data:"💾 Booking Data",dataInfo:"Create a backup before deleting data. Backup includes vehicles and bookings as JSON.",backup:"⬇ Backup JSON",restore:"⬆ Restore JSON",clear:"Delete All Bookings",notice:"Note: this version uses browser localStorage. Admin/booking data is not stored on a server and is not synchronized across devices. For real multi-admin operation, a database and backend authentication are needed.",available:"Available",rented:"Rented",edit:"Edit",delete:"Delete",wa:"WhatsApp",status:"Status",type:"Type",price:"Price",actions:"Actions",name:"Name",phone:"WhatsApp",vehicle:"Vehicle",period:"Period",total:"Total",created:"Created",noBooking:"No bookings yet.",save:"Save",cancel:"Cancel",add:"Add",vehicleName:"Vehicle name",vehiclePrice:"Price",vehicleStatus:"Status",bookingEdit:"Edit Booking",notes:"Admin notes"},
+zh:{sub:"管理车辆、预订和业务概览",login:"🔐 管理员登录",loginInfo:"演示默认密码：gaeluwih。此页面使用浏览器 localStorage，而不是在线数据库。",password:"密码",enter:"登录",dashboard:"仪表板",site:"🌐 网站",refresh:"↻ 刷新",logout:"退出",dashTab:"📊 仪表板",bookTab:"📋 预订",vehTab:"🚗 车辆",setTab:"⚙️ 设置",recent:"最新预订",all:"查看全部",summary:"车辆概览",manageBook:"预订管理",export:"⬇ 导出 CSV",search:"搜索姓名、WhatsApp、车辆...",allStatus:"全部状态",allVehicles:"全部车辆",cars:"汽车",bikes:"摩托车",new:"新预订",confirmed:"已确认",completed:"已完成",cancelled:"已取消",manageVeh:"车辆管理",addVeh:"＋ 添加车辆",changePass:"🔐 更改管理员密码",oldPass:"旧密码",newPass:"新密码",change:"更改密码",data:"💾 预订数据",dataInfo:"删除数据前请先备份。备份会保存车辆和预订 JSON。",backup:"⬇ 备份 JSON",restore:"⬆ 恢复 JSON",clear:"删除全部预订",notice:"注意：此版本使用浏览器 localStorage。管理员/预订数据尚未存储在服务器，也不会在设备之间自动同步。正式多管理员运营需要数据库和后端认证。",available:"可用",rented:"已租",edit:"编辑",delete:"删除",wa:"WhatsApp",status:"状态",type:"类型",price:"价格",actions:"操作",name:"姓名",phone:"WhatsApp",vehicle:"车辆",period:"期间",total:"总计",created:"创建",noBooking:"暂无预订。",save:"保存",cancel:"取消",add:"添加",vehicleName:"车辆名称",vehiclePrice:"价格",vehicleStatus:"状态",bookingEdit:"编辑预订",notes:"管理员备注"},
+ja:{sub:"車両、予約、業務概要を管理",login:"🔐 管理者ログイン",loginInfo:"デモの初期パスワード：gaeluwih。現在はオンラインDBではなくブラウザのlocalStorageを使用しています。",password:"パスワード",enter:"ログイン",dashboard:"ダッシュボード",site:"🌐 Webサイト",refresh:"↻ 更新",logout:"ログアウト",dashTab:"📊 ダッシュボード",bookTab:"📋 予約",vehTab:"🚗 車両",setTab:"⚙️ 設定",recent:"最近の予約",all:"すべて表示",summary:"車両概要",manageBook:"予約管理",export:"⬇ CSV出力",search:"名前、WhatsApp、車両を検索...",allStatus:"すべてのステータス",allVehicles:"すべての車両",cars:"車",bikes:"バイク",new:"新規",confirmed:"確認済み",completed:"完了",cancelled:"キャンセル",manageVeh:"車両管理",addVeh:"＋ 車両を追加",changePass:"🔐 管理者パスワード変更",oldPass:"現在のパスワード",newPass:"新しいパスワード",change:"変更",data:"💾 予約データ",dataInfo:"データを削除する前にバックアップしてください。車両と予約をJSONで保存します。",backup:"⬇ JSONバックアップ",restore:"⬆ JSON復元",clear:"すべての予約を削除",notice:"注意：このバージョンはブラウザのlocalStorageを使用します。管理者/予約データはサーバーに保存されず、端末間で自動同期されません。実運用にはDBとバックエンド認証が必要です。",available:"利用可能",rented:"貸出中",edit:"編集",delete:"削除",wa:"WhatsApp",status:"ステータス",type:"種類",price:"料金",actions:"操作",name:"名前",phone:"WhatsApp",vehicle:"車両",period:"期間",total:"合計",created:"作成",noBooking:"予約はありません。",save:"保存",cancel:"キャンセル",add:"追加",vehicleName:"車両名",vehiclePrice:"料金",vehicleStatus:"状態",bookingEdit:"予約を編集",notes:"管理者メモ"},
+ko:{sub:"차량, 예약 및 사업 요약 관리",login:"🔐 관리자 로그인",loginInfo:"데모 기본 비밀번호: gaeluwih. 현재 온라인 데이터베이스가 아닌 브라우저 localStorage를 사용합니다.",password:"비밀번호",enter:"로그인",dashboard:"대시보드",site:"🌐 웹사이트",refresh:"↻ 새로고침",logout:"로그아웃",dashTab:"📊 대시보드",bookTab:"📋 예약",vehTab:"🚗 차량",setTab:"⚙️ 설정",recent:"최근 예약",all:"전체 보기",summary:"차량 요약",manageBook:"예약 관리",export:"⬇ CSV 내보내기",search:"이름, WhatsApp, 차량 검색...",allStatus:"모든 상태",allVehicles:"모든 차량",cars:"자동차",bikes:"오토바이",new:"신규",confirmed:"확정",completed:"완료",cancelled:"취소",manageVeh:"차량 관리",addVeh:"＋ 차량 추가",changePass:"🔐 관리자 비밀번호 변경",oldPass:"기존 비밀번호",newPass:"새 비밀번호",change:"변경",data:"💾 예약 데이터",dataInfo:"데이터 삭제 전에 백업하세요. 차량과 예약을 JSON으로 저장합니다.",backup:"⬇ JSON 백업",restore:"⬆ JSON 복원",clear:"모든 예약 삭제",notice:"참고: 이 버전은 브라우저 localStorage를 사용합니다. 관리자/예약 데이터는 서버에 저장되지 않으며 기기 간 자동 동기화도 되지 않습니다. 실제 다중 관리자 운영에는 DB와 백엔드 인증이 필요합니다.",available:"이용 가능",rented:"대여 중",edit:"편집",delete:"삭제",wa:"WhatsApp",status:"상태",type:"종류",price:"가격",actions:"작업",name:"이름",phone:"WhatsApp",vehicle:"차량",period:"기간",total:"총액",created:"생성",noBooking:"예약이 없습니다.",save:"저장",cancel:"취소",add:"추가",vehicleName:"차량명",vehiclePrice:"가격",vehicleStatus:"상태",bookingEdit:"예약 편집",notes:"관리자 메모"},
+de:{sub:"Fahrzeuge, Buchungen und Geschäftsübersicht verwalten",login:"🔐 Admin-Login",loginInfo:"Demo-Standardpasswort: gaeluwih. Diese Seite verwendet derzeit Browser-localStorage, keine Online-Datenbank.",password:"Passwort",enter:"Anmelden",dashboard:"Dashboard",site:"🌐 Website",refresh:"↻ Aktualisieren",logout:"Abmelden",dashTab:"📊 Dashboard",bookTab:"📋 Buchungen",vehTab:"🚗 Fahrzeuge",setTab:"⚙️ Einstellungen",recent:"Neueste Buchungen",all:"Alle anzeigen",summary:"Fahrzeugübersicht",manageBook:"Buchungsverwaltung",export:"⬇ CSV exportieren",search:"Name, WhatsApp oder Fahrzeug suchen...",allStatus:"Alle Status",allVehicles:"Alle Fahrzeuge",cars:"Autos",bikes:"Motorräder",new:"Neu",confirmed:"Bestätigt",completed:"Abgeschlossen",cancelled:"Storniert",manageVeh:"Fahrzeugverwaltung",addVeh:"＋ Fahrzeug hinzufügen",changePass:"🔐 Admin-Passwort ändern",oldPass:"Altes Passwort",newPass:"Neues Passwort",change:"Passwort ändern",data:"💾 Buchungsdaten",dataInfo:"Vor dem Löschen eine Sicherung erstellen. Die Sicherung enthält Fahrzeuge und Buchungen als JSON.",backup:"⬇ JSON sichern",restore:"⬆ JSON wiederherstellen",clear:"Alle Buchungen löschen",notice:"Hinweis: Diese Version verwendet Browser-localStorage. Admin-/Buchungsdaten werden nicht auf einem Server gespeichert und nicht zwischen Geräten synchronisiert. Für den echten Mehrbenutzerbetrieb werden Datenbank und Backend-Authentifizierung benötigt.",available:"Verfügbar",rented:"Vermietet",edit:"Bearbeiten",delete:"Löschen",wa:"WhatsApp",status:"Status",type:"Typ",price:"Preis",actions:"Aktionen",name:"Name",phone:"WhatsApp",vehicle:"Fahrzeug",period:"Zeitraum",total:"Gesamt",created:"Erstellt",noBooking:"Noch keine Buchungen.",save:"Speichern",cancel:"Abbrechen",add:"Hinzufügen",vehicleName:"Fahrzeugname",vehiclePrice:"Preis",vehicleStatus:"Status",bookingEdit:"Buchung bearbeiten",notes:"Admin-Notiz"},
+fr:{sub:"Gérer les véhicules, réservations et résumé d'activité",login:"🔐 Connexion Admin",loginInfo:"Mot de passe démo par défaut : gaeluwih. Cette page utilise encore le localStorage du navigateur, pas une base de données en ligne.",password:"Mot de passe",enter:"Connexion",dashboard:"Tableau de bord",site:"🌐 Site web",refresh:"↻ Actualiser",logout:"Déconnexion",dashTab:"📊 Tableau de bord",bookTab:"📋 Réservations",vehTab:"🚗 Véhicules",setTab:"⚙️ Paramètres",recent:"Réservations récentes",all:"Voir tout",summary:"Résumé des véhicules",manageBook:"Gestion des réservations",export:"⬇ Exporter CSV",search:"Rechercher nom, WhatsApp, véhicule...",allStatus:"Tous les statuts",allVehicles:"Tous les véhicules",cars:"Voitures",bikes:"Motos",new:"Nouveau",confirmed:"Confirmée",completed:"Terminée",cancelled:"Annulée",manageVeh:"Gestion des véhicules",addVeh:"＋ Ajouter un véhicule",changePass:"🔐 Changer le mot de passe Admin",oldPass:"Ancien mot de passe",newPass:"Nouveau mot de passe",change:"Changer",data:"💾 Données des réservations",dataInfo:"Faites une sauvegarde avant de supprimer. La sauvegarde contient véhicules et réservations en JSON.",backup:"⬇ Sauvegarde JSON",restore:"⬆ Restaurer JSON",clear:"Supprimer toutes les réservations",notice:"Note : cette version utilise le localStorage du navigateur. Les données ne sont pas stockées sur un serveur et ne sont pas synchronisées entre appareils. Une base de données et une authentification backend sont nécessaires pour un usage réel multi-admin.",available:"Disponible",rented:"Loué",edit:"Modifier",delete:"Supprimer",wa:"WhatsApp",status:"Statut",type:"Type",price:"Prix",actions:"Actions",name:"Nom",phone:"WhatsApp",vehicle:"Véhicule",period:"Période",total:"Total",created:"Créée",noBooking:"Aucune réservation.",save:"Enregistrer",cancel:"Annuler",add:"Ajouter",vehicleName:"Nom du véhicule",vehiclePrice:"Prix",vehicleStatus:"Statut",bookingEdit:"Modifier la réservation",notes:"Note admin"},
+es:{sub:"Gestiona vehículos, reservas y resumen del negocio",login:"🔐 Acceso de administrador",loginInfo:"Contraseña demo predeterminada: gaeluwih. Esta página usa localStorage del navegador, no una base de datos online.",password:"Contraseña",enter:"Entrar",dashboard:"Panel",site:"🌐 Sitio web",refresh:"↻ Actualizar",logout:"Salir",dashTab:"📊 Panel",bookTab:"📋 Reservas",vehTab:"🚗 Vehículos",setTab:"⚙️ Ajustes",recent:"Reservas recientes",all:"Ver todas",summary:"Resumen de vehículos",manageBook:"Gestión de reservas",export:"⬇ Exportar CSV",search:"Buscar nombre, WhatsApp, vehículo...",allStatus:"Todos los estados",allVehicles:"Todos los vehículos",cars:"Coches",bikes:"Motos",new:"Nueva",confirmed:"Confirmada",completed:"Completada",cancelled:"Cancelada",manageVeh:"Gestión de vehículos",addVeh:"＋ Añadir vehículo",changePass:"🔐 Cambiar contraseña de administrador",oldPass:"Contraseña anterior",newPass:"Nueva contraseña",change:"Cambiar",data:"💾 Datos de reservas",dataInfo:"Haz una copia antes de borrar. La copia guarda vehículos y reservas en JSON.",backup:"⬇ Copia JSON",restore:"⬆ Restaurar JSON",clear:"Eliminar todas las reservas",notice:"Nota: esta versión usa localStorage del navegador. Los datos no se guardan en un servidor ni se sincronizan automáticamente entre dispositivos. Para uso real multiadministrador se necesitan base de datos y autenticación backend.",available:"Disponible",rented:"Alquilado",edit:"Editar",delete:"Eliminar",wa:"WhatsApp",status:"Estado",type:"Tipo",price:"Precio",actions:"Acciones",name:"Nombre",phone:"WhatsApp",vehicle:"Vehículo",period:"Periodo",total:"Total",created:"Creada",noBooking:"No hay reservas.",save:"Guardar",cancel:"Cancelar",add:"Añadir",vehicleName:"Nombre del vehículo",vehiclePrice:"Precio",vehicleStatus:"Estado",bookingEdit:"Editar reserva",notes:"Nota del administrador"}
+};
+
+let currentLang=localStorage.getItem("gae_luwih_lang")||"id";
+let activeTab="dashboard";
+
+function cloneDefaults(){return JSON.parse(JSON.stringify(defaults))}
+function data(){
+ try{
+  const raw=localStorage.getItem(KEY);
+  if(!raw){const d=cloneDefaults();save(d);return d}
+  const d=JSON.parse(raw);
+  d.cars=d.cars||[];d.bikes=d.bikes||[];d.bookings=d.bookings||[];
+  return d;
+ }catch(e){return cloneDefaults()}
+}
+function save(d){localStorage.setItem(KEY,JSON.stringify(d))}
+function rp(n){return new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0)}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+function typeLabel(t){return t==="car"?LANGS[currentLang].cars:LANGS[currentLang].bikes}
+function statusLabel(s){const t=LANGS[currentLang];return s==="confirmed"?t.confirmed:s==="completed"?t.completed:s==="cancelled"?t.cancelled:t.new}
+function statusClass(s){return s==="confirmed"?"confirmed":s==="completed"?"completed":s==="cancelled"?"cancelled":"new"}
+function bookingStatus(x){return x.status||"new"}
+
+function login(){
+ const p=document.getElementById("pass").value;
+ if(p===(localStorage.getItem(PASSKEY)||"gaeluwih")){sessionStorage.setItem("gae_admin","1");show()}
+ else document.getElementById("err").textContent=currentLang==="id"?"Password salah.":"Incorrect password.";
+}
+function show(){document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");applyLanguage(currentLang);renderAll()}
 function logout(){sessionStorage.removeItem("gae_admin");location.reload()}
-function render(){const d=data(),all=[...d.cars.map(x=>({...x,type:"Mobil"})),...d.bikes.map(x=>({...x,type:"Motor"}))];document.getElementById("stats").innerHTML=`<div class="stat"><b>Kendaraan</b><h2>${all.length}</h2></div><div class="stat"><b>Tersedia</b><h2>${all.filter(x=>x.status==="Tersedia").length}</h2></div><div class="stat"><b>Booking</b><h2>${d.bookings.length}</h2></div>`;document.getElementById("vehicles").innerHTML=all.map(v=>`<div class="vehicle"><b>${v.name}</b><div>${v.type} • ${rp(v.price)}/${v.type==="Mobil"?"hari":"bulan"}</div><p class="${v.status==="Tersedia"?"ok":"busy"}">${v.status}</p><button onclick="toggleStatus('${v.id}','${v.type==="Mobil"?"car":"bike"}')">Ubah Status</button> <button class="secondary" onclick="editPrice('${v.id}','${v.type==="Mobil"?"car":"bike"}')">Ubah Harga</button> <button class="danger" onclick="deleteVehicle('${v.id}','${v.type==="Mobil"?"car":"bike"}')">Hapus</button></div>`).join("");let b=d.bookings;document.getElementById("bookings").innerHTML=b.length?`<table><thead><tr><th>Pemesan</th><th>Kendaraan</th><th>Periode</th><th>Total</th><th>Aksi</th></tr></thead><tbody>${b.map(x=>`<tr><td>${x.name}<br>${x.phone}</td><td>${x.vehicle}<br>${x.type}</td><td>${x.start}${x.end?" → "+x.end:""}<br>${x.duration} ${x.type==="car"?"hari":"bulan"}</td><td>${rp(x.total)}</td><td><button onclick="wa('${x.phone}','${x.name}','${x.vehicle}')">WhatsApp</button> <button class="danger" onclick="deleteBooking(${x.id})">Hapus</button></td></tr>`).join("")}</tbody></table>`:"<p class='muted'>Belum ada booking.</p>"}
-function find(id,t){const d=data();return (t==="car"?d.cars:d.bikes).find(x=>x.id===id)}
-function toggleStatus(id,t){const d=data(),v=find(id,t);v.status=v.status==="Tersedia"?"Disewa":"Tersedia";save(d);render()}
-function editPrice(id,t){const d=data(),v=find(id,t),p=prompt("Harga baru:",v.price);if(p!==null&&!isNaN(p)&&Number(p)>0){v.price=Number(p);save(d);render()}}
-function deleteVehicle(id,t){if(!confirm("Hapus kendaraan ini?"))return;const d=data();d[t==="car"?"cars":"bikes"]=d[t==="car"?"cars":"bikes"].filter(x=>x.id!==id);save(d);render()}
-function addVehicle(){const d=data(),name=document.getElementById("newName").value.trim(),price=Number(document.getElementById("newPrice").value),t=document.getElementById("newType").value,status=document.getElementById("newStatus").value;if(!name||!price)return alert("Isi nama dan harga.");(t==="car"?d.cars:d.bikes).push({id:t+Date.now(),name,price,status});save(d);document.getElementById("newName").value="";document.getElementById("newPrice").value="";render()}
-function deleteBooking(id){const d=data();d.bookings=d.bookings.filter(x=>x.id!==id);save(d);render()}
-function clearBookings(){if(confirm("Hapus semua booking?")){const d=data();d.bookings=[];save(d);render()}}
-function wa(phone,name,vehicle){let n=phone.replace(/\D/g,"");if(n.startsWith("0"))n="62"+n.slice(1);window.open("https://wa.me/"+n+"?text="+encodeURIComponent("Halo "+name+", ini GAE Luwih Rental terkait booking "+vehicle+"."),"_blank")}
-function changePass(){const old=document.getElementById("oldPass").value,nw=document.getElementById("newPass").value,current=localStorage.getItem(PASSKEY)||"gaeluwih";if(old!==current||!nw)return alert("Password lama salah atau password baru kosong.");localStorage.setItem(PASSKEY,nw);alert("Password demo berhasil diganti.")}
-if(sessionStorage.getItem("gae_admin")==="1")show()
-</script><script>
-const ADMIN_LANGS={"id": {"subtitle": "Rental Mobil & Motor • Bali", "navVehicles": "Kendaraan", "navBooking": "Booking", "navAdmin": "Admin", "hero": "Rental Mobil & Motor", "heroText": "Pilih kendaraan, tentukan durasi, lalu kirim permintaan booking melalui WhatsApp.", "car": "Mobil", "bike": "Motor", "form": "📋 Form Pemesanan", "name": "Nama", "namePh": "Nama lengkap", "phone": "No. WhatsApp", "phonePh": "08xxxxxxxxxx", "vehicle": "Kendaraan", "start": "Tanggal mulai", "end": "Tanggal selesai", "days": "Jumlah hari", "months": "Jumlah bulan", "total": "Total", "order": "Pesan via WhatsApp", "note": "Mobil dihitung per hari dengan minimal booking 7 hari (1 minggu). Motor dihitung per bulan.", "choose": "Pilih Kendaraan", "unavailable": "Tidak tersedia", "available": "Tersedia", "rented": "Disewa", "complete": "Mohon lengkapi data pemesanan.", "min7": "Minimal booking mobil adalah 1 minggu (7 hari)."}, "en": {"subtitle": "Car & Motorcycle Rental • Bali", "navVehicles": "Vehicles", "navBooking": "Booking", "navAdmin": "Admin", "hero": "Car & Motorcycle Rental", "heroText": "Choose a vehicle, set the duration, then send your booking request via WhatsApp.", "car": "Cars", "bike": "Motorcycles", "form": "📋 Booking Form", "name": "Name", "namePh": "Full name", "phone": "WhatsApp number", "phonePh": "08xxxxxxxxxx", "vehicle": "Vehicle", "start": "Start date", "end": "End date", "days": "Number of days", "months": "Number of months", "total": "Total", "order": "Book via WhatsApp", "note": "Cars are charged per day with a minimum 7-day booking. Motorcycles are charged monthly.", "choose": "Select Vehicle", "unavailable": "Unavailable", "available": "Available", "rented": "Rented", "complete": "Please complete the booking details.", "min7": "Cars require a minimum booking of 7 days."}, "zh": {"subtitle": "巴厘岛汽车和摩托车租赁", "navVehicles": "车辆", "navBooking": "预订", "navAdmin": "管理", "hero": "汽车和摩托车租赁", "heroText": "选择车辆、确定租期，然后通过 WhatsApp 发送预订请求。", "car": "汽车", "bike": "摩托车", "form": "📋 预订表格", "name": "姓名", "namePh": "姓名", "phone": "WhatsApp号码", "phonePh": "08xxxxxxxxxx", "vehicle": "车辆", "start": "开始日期", "end": "结束日期", "days": "天数", "months": "月数", "total": "总计", "order": "通过 WhatsApp 预订", "note": "汽车按天计费，最低预订7天。摩托车按月计费。", "choose": "选择车辆", "unavailable": "不可用", "available": "可用", "rented": "已租", "complete": "请填写完整的预订信息。", "min7": "汽车最低预订时间为7天。"}, "ja": {"subtitle": "バリ島の車・バイクレンタル", "navVehicles": "車両", "navBooking": "予約", "navAdmin": "管理", "hero": "車・バイクレンタル", "heroText": "車両を選び、期間を設定して、WhatsAppから予約リクエストを送信してください。", "car": "車", "bike": "バイク", "form": "📋 予約フォーム", "name": "お名前", "namePh": "お名前", "phone": "WhatsApp番号", "phonePh": "08xxxxxxxxxx", "vehicle": "車両", "start": "開始日", "end": "終了日", "days": "日数", "months": "月数", "total": "合計", "order": "WhatsAppで予約", "note": "車は1日単位で、最低7日間の予約です。バイクは月額です。", "choose": "車両を選択", "unavailable": "利用不可", "available": "利用可能", "rented": "貸出中", "complete": "予約情報を入力してください。", "min7": "車の最低予約期間は7日間です。"}, "ko": {"subtitle": "발리 자동차 & 오토바이 렌탈", "navVehicles": "차량", "navBooking": "예약", "navAdmin": "관리자", "hero": "자동차 & 오토바이 렌탈", "heroText": "차량을 선택하고 기간을 정한 후 WhatsApp으로 예약 요청을 보내세요.", "car": "자동차", "bike": "오토바이", "form": "📋 예약 양식", "name": "이름", "namePh": "이름", "phone": "WhatsApp 번호", "phonePh": "08xxxxxxxxxx", "vehicle": "차량", "start": "시작일", "end": "종료일", "days": "일수", "months": "개월 수", "total": "총액", "order": "WhatsApp으로 예약", "note": "자동차는 일 단위이며 최소 7일 예약입니다. 오토바이는 월 단위입니다.", "choose": "차량 선택", "unavailable": "이용 불가", "available": "대여 가능", "rented": "대여 중", "complete": "예약 정보를 입력해 주세요.", "min7": "자동차 최소 예약 기간은 7일입니다."}, "de": {"subtitle": "Auto- & Motorradvermietung • Bali", "navVehicles": "Fahrzeuge", "navBooking": "Buchung", "navAdmin": "Admin", "hero": "Auto- & Motorradvermietung", "heroText": "Fahrzeug auswählen, Dauer festlegen und die Buchungsanfrage per WhatsApp senden.", "car": "Autos", "bike": "Motorräder", "form": "📋 Buchungsformular", "name": "Name", "namePh": "Vollständiger Name", "phone": "WhatsApp-Nummer", "phonePh": "08xxxxxxxxxx", "vehicle": "Fahrzeug", "start": "Startdatum", "end": "Enddatum", "days": "Anzahl Tage", "months": "Anzahl Monate", "total": "Gesamt", "order": "Über WhatsApp buchen", "note": "Autos werden pro Tag berechnet, mindestens 7 Tage. Motorräder werden monatlich berechnet.", "choose": "Fahrzeug auswählen", "unavailable": "Nicht verfügbar", "available": "Verfügbar", "rented": "Vermietet", "complete": "Bitte füllen Sie die Buchungsdaten aus.", "min7": "Autos müssen mindestens 7 Tage gebucht werden."}, "fr": {"subtitle": "Location de voitures et motos • Bali", "navVehicles": "Véhicules", "navBooking": "Réservation", "navAdmin": "Admin", "hero": "Location de voitures et motos", "heroText": "Choisissez un véhicule, définissez la durée, puis envoyez votre demande via WhatsApp.", "car": "Voitures", "bike": "Motos", "form": "📋 Formulaire de réservation", "name": "Nom", "namePh": "Nom complet", "phone": "Numéro WhatsApp", "phonePh": "08xxxxxxxxxx", "vehicle": "Véhicule", "start": "Date de début", "end": "Date de fin", "days": "Nombre de jours", "months": "Nombre de mois", "total": "Total", "order": "Réserver via WhatsApp", "note": "Les voitures sont facturées par jour, avec un minimum de 7 jours. Les motos sont facturées au mois.", "choose": "Choisir un véhicule", "unavailable": "Indisponible", "available": "Disponible", "rented": "Loué", "complete": "Veuillez compléter les informations de réservation.", "min7": "La réservation minimale d'une voiture est de 7 jours."}, "es": {"subtitle": "Alquiler de coches y motos • Bali", "navVehicles": "Vehículos", "navBooking": "Reserva", "navAdmin": "Admin", "hero": "Alquiler de coches y motos", "heroText": "Elige un vehículo, define la duración y envía tu solicitud por WhatsApp.", "car": "Coches", "bike": "Motos", "form": "📋 Formulario de reserva", "name": "Nombre", "namePh": "Nombre completo", "phone": "Número de WhatsApp", "phonePh": "08xxxxxxxxxx", "vehicle": "Vehículo", "start": "Fecha de inicio", "end": "Fecha de fin", "days": "Número de días", "months": "Número de meses", "total": "Total", "order": "Reservar por WhatsApp", "note": "Los coches se cobran por día, con una reserva mínima de 7 días. Las motos se cobran por mes.", "choose": "Elegir vehículo", "unavailable": "No disponible", "available": "Disponible", "rented": "Alquilado", "complete": "Completa los datos de la reserva.", "min7": "La reserva mínima de un coche es de 7 días."}};
-document.addEventListener("DOMContentLoaded",()=>{
- const s=document.getElementById("languageSelect"), saved=localStorage.getItem("gae_luwih_lang")||"id";
- if(s){s.value=saved;s.addEventListener("change",e=>{localStorage.setItem("gae_luwih_lang",e.target.value);location.reload()});}
- document.documentElement.lang=saved;
-});
-</script></body></html>
+function refreshData(){renderAll()}
+function switchTab(tab){
+ activeTab=tab;
+ ["dashboard","bookings","vehicles","settings"].forEach(x=>document.getElementById(x+"Section").classList.toggle("hidden",x!==tab));
+ ["tabDashboard","tabBookings","tabVehicles","tabSettings"].forEach(x=>document.getElementById(x).classList.remove("on"));
+ document.getElementById("tab"+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add("on");
+ if(tab==="bookings")renderBookings();
+ if(tab==="vehicles")renderVehicles();
+}
+function renderAll(){renderStats();renderRecent();renderVehicleSummary();renderBookings();renderVehicles();document.getElementById("lastUpdated").textContent=new Date().toLocaleString(currentLang==="id"?"id-ID":currentLang)}
+function renderStats(){
+ const d=data(),all=[...d.cars,...d.bikes],books=d.bookings;
+ const revenue=books.filter(b=>bookingStatus(b)!=="cancelled").reduce((s,b)=>s+Number(b.total||0),0);
+ const pending=books.filter(b=>bookingStatus(b)==="new").length;
+ document.getElementById("stats").innerHTML=[
+  ["Kendaraan",all.length],["Tersedia",all.filter(v=>v.status==="Tersedia").length],["Booking",books.length],["Menunggu",pending],["Nilai Booking",rp(revenue)]
+ ].map(x=>`<div class="stat"><div class="muted">${x[0]}</div><div class="num">${x[1]}</div></div>`).join("");
+}
+function renderRecent(){
+ const b=data().bookings.slice().sort((a,b)=>(new Date(b.created||0))-(new Date(a.created||0))).slice(0,5);
+ document.getElementById("recentBookings").innerHTML=b.length?`<div class="tablewrap"><table><thead><tr><th>${LANGS[currentLang].name}</th><th>${LANGS[currentLang].vehicle}</th><th>${LANGS[currentLang].period}</th><th>${LANGS[currentLang].total}</th><th>${LANGS[currentLang].status}</th></tr></thead><tbody>${b.map(x=>`<tr><td>${esc(x.name)}<br><span class="muted">${esc(x.phone)}</span></td><td>${esc(x.vehicle)}<br><span class="muted">${typeLabel(x.type)}</span></td><td>${esc(x.start||"")}${x.end?" → "+esc(x.end):""}<br>${esc(x.duration)} ${x.type==="car"?"hari":"bulan"}</td><td>${rp(x.total)}</td><td><span class="badge ${statusClass(bookingStatus(x))}">${statusLabel(bookingStatus(x))}</span></td></tr>`).join("")}</tbody></table></div>`:`<p class="muted">${LANGS[currentLang].noBooking}</p>`;
+}
+function renderVehicleSummary(){
+ const d=data(),all=[...d.cars.map(x=>({...x,type:"car"})),...d.bikes.map(x=>({...x,type:"bike"}))];
+ document.getElementById("vehicleSummary").innerHTML=all.map(v=>`<div class="stat"><b>${esc(v.name)}</b><div class="muted">${typeLabel(v.type)}</div><div class="${v.status==="Tersedia"?"ok":"busy"}">${v.status==="Tersedia"?"● "+LANGS[currentLang].available:"● "+LANGS[currentLang].rented}</div></div>`).join("");
+}
+function renderBookings(){
+ const d=data(),q=(document.getElementById("searchBooking")?.value||"").toLowerCase().trim(),fs=document.getElementById("filterStatus")?.value||"all",ft=document.getElementById("filterType")?.value||"all";
+ let b=d.bookings.filter(x=>{
+  const hay=[x.name,x.phone,x.vehicle,x.start,x.end].join(" ").toLowerCase();
+  return (!q||hay.includes(q))&&(fs==="all"||bookingStatus(x)===fs)&&(ft==="all"||x.type===ft)
+ }).sort((a,b)=>(new Date(b.created||0))-(new Date(a.created||0)));
+ document.getElementById("bookings").innerHTML=b.length?`<div class="tablewrap"><table><thead><tr><th>${LANGS[currentLang].name}</th><th>${LANGS[currentLang].vehicle}</th><th>${LANGS[currentLang].period}</th><th>${LANGS[currentLang].total}</th><th>${LANGS[currentLang].status}</th><th>${LANGS[currentLang].actions}</th></tr></thead><tbody>${b.map(x=>`<tr><td><b>${esc(x.name)}</b><br>${esc(x.phone)}</td><td>${esc(x.vehicle)}<br><span class="muted">${typeLabel(x.type)}</span></td><td>${esc(x.start||"")}${x.end?" → "+esc(x.end):""}<br>${esc(x.duration)} ${x.type==="car"?"hari":"bulan"}</td><td><b>${rp(x.total)}</b></td><td><span class="badge ${statusClass(bookingStatus(x))}">${statusLabel(bookingStatus(x))}</span></td><td><button class="smallbtn blue" onclick="editBooking(${x.id})">${LANGS[currentLang].edit}</button><button class="smallbtn green" onclick="wa(${x.id})">${LANGS[currentLang].wa}</button><button class="smallbtn danger" onclick="deleteBooking(${x.id})">${LANGS[currentLang].delete}</button></td></tr>`).join("")}</tbody></table></div>`:`<p class="muted">${LANGS[currentLang].noBooking}</p>`;
+}
+function renderVehicles(){
+ const d=data(),all=[...d.cars.map(x=>({...x,type:"car"})),...d.bikes.map(x=>({...x,type:"bike"}))];
+ document.getElementById("vehicles").innerHTML=all.map(v=>`<div class="vehicle">
+ <h3>${esc(v.name)}</h3><div class="muted">${typeLabel(v.type)}</div>
+ <div class="price">${rp(v.price)} / ${v.type==="car"?"hari":"bulan"}</div>
+ <div class="${v.status==="Tersedia"?"ok":"busy"}">${v.status==="Tersedia"?"● "+LANGS[currentLang].available:"● "+LANGS[currentLang].rented}</div><br>
+ <div class="actions">
+ <button class="smallbtn" onclick="toggleStatus('${v.id}','${v.type}')">${LANGS[currentLang].status}</button>
+ <button class="smallbtn secondary" onclick="editVehicle('${v.id}','${v.type}')">${LANGS[currentLang].edit}</button>
+ <button class="smallbtn danger" onclick="deleteVehicle('${v.id}','${v.type}')">${LANGS[currentLang].delete}</button>
+ </div></div>`).join("");
+}
+function findVehicle(id,t){const d=data();return (t==="car"?d.cars:d.bikes).find(x=>x.id===id)}
+function toggleStatus(id,t){const d=data(),v=findVehicle(id,t);if(!v)return;v.status=v.status==="Tersedia"?"Disewa":"Tersedia";save(d);renderAll()}
+function editVehicle(id,t){
+ const v=findVehicle(id,t);if(!v)return;
+ openModal(LANGS[currentLang].edit+" "+LANGS[currentLang].vehicleName,`<label>${LANGS[currentLang].vehicleName}</label><input id="mName" value="${esc(v.name)}"><br><label>${LANGS[currentLang].vehiclePrice}</label><input id="mPrice" type="number" value="${Number(v.price)}"><br><label>${LANGS[currentLang].vehicleStatus}</label><select id="mStatus"><option ${v.status==="Tersedia"?"selected":""}>Tersedia</option><option ${v.status==="Disewa"?"selected":""}>Disewa</option></select><br><div class="actions"><button onclick="saveVehicleEdit('${id}','${t}')">${LANGS[currentLang].save}</button><button class="secondary" onclick="closeModal()">${LANGS[currentLang].cancel}</button></div>`);
+}
+function saveVehicleEdit(id,t){const d=data(),v=findVehicle(id,t),n=document.getElementById("mName").value.trim(),p=Number(document.getElementById("mPrice").value),s=document.getElementById("mStatus").value;if(!v||!n||p<=0)return alert("Data tidak valid.");v.name=n;v.price=p;v.status=s;save(d);closeModal();renderAll()}
+function openAddVehicle(){
+ openModal(LANGS[currentLang].addVeh,`<label>${LANGS[currentLang].vehicleName}</label><input id="mName" placeholder="${LANGS[currentLang].vehicleName}"><br><label>${LANGS[currentLang].type}</label><select id="mType"><option value="car">${LANGS[currentLang].cars}</option><option value="bike">${LANGS[currentLang].bikes}</option></select><br><label>${LANGS[currentLang].vehiclePrice}</label><input id="mPrice" type="number" placeholder="350000"><br><label>${LANGS[currentLang].vehicleStatus}</label><select id="mStatus"><option>Tersedia</option><option>Disewa</option></select><br><div class="actions"><button class="green" onclick="saveNewVehicle()">${LANGS[currentLang].add}</button><button class="secondary" onclick="closeModal()">${LANGS[currentLang].cancel}</button></div>`);
+}
+function saveNewVehicle(){const d=data(),n=document.getElementById("mName").value.trim(),t=document.getElementById("mType").value,p=Number(document.getElementById("mPrice").value),s=document.getElementById("mStatus").value;if(!n||p<=0)return alert("Isi nama dan harga.");(t==="car"?d.cars:d.bikes).push({id:t+Date.now(),name:n,price:p,status:s});save(d);closeModal();renderAll()}
+function deleteVehicle(id,t){if(!confirm("Hapus kendaraan ini?"))return;const d=data();const k=t==="car"?"cars":"bikes";d[k]=d[k].filter(x=>x.id!==id);save(d);renderAll()}
+function editBooking(id){
+ const x=data().bookings.find(b=>b.id===id);if(!x)return;
+ const st=bookingStatus(x);
+ openModal(LANGS[currentLang].bookingEdit,`
+ <div class="row"><div><label>${LANGS[currentLang].name}</label><input id="bName" value="${esc(x.name)}"></div><div><label>${LANGS[currentLang].phone}</label><input id="bPhone" value="${esc(x.phone)}"></div></div>
+ <br><label>${LANGS[currentLang].status}</label><select id="bStatus"><option value="new" ${st==="new"?"selected":""}>${LANGS[currentLang].new}</option><option value="confirmed" ${st==="confirmed"?"selected":""}>${LANGS[currentLang].confirmed}</option><option value="completed" ${st==="completed"?"selected":""}>${LANGS[currentLang].completed}</option><option value="cancelled" ${st==="cancelled"?"selected":""}>${LANGS[currentLang].cancelled}</option></select>
+ <br><label>${LANGS[currentLang].notes}</label><textarea id="bNotes">${esc(x.notes||"")}</textarea>
+ <br><div class="actions"><button onclick="saveBookingEdit(${id})">${LANGS[currentLang].save}</button><button class="secondary" onclick="closeModal()">${LANGS[currentLang].cancel}</button></div>`);
+}
+function saveBookingEdit(id){const d=data(),x=d.bookings.find(b=>b.id===id);if(!x)return;x.name=document.getElementById("bName").value.trim();x.phone=document.getElementById("bPhone").value.trim();x.status=document.getElementById("bStatus").value;x.notes=document.getElementById("bNotes").value.trim();save(d);closeModal();renderAll()}
+function deleteBooking(id){if(!confirm("Hapus booking ini?"))return;const d=data();d.bookings=d.bookings.filter(x=>x.id!==id);save(d);renderAll()}
+function wa(id){const x=data().bookings.find(b=>b.id===id);if(!x)return;let n=String(x.phone||"").replace(/\D/g,"");if(n.startsWith("0"))n="62"+n.slice(1);const msg=`Halo ${x.name||""}, ini GAE Luwih Rental terkait booking ${x.vehicle||""}.`;window.open("https://wa.me/"+n+"?text="+encodeURIComponent(msg),"_blank")}
+function clearBookings(){if(!confirm("Hapus SEMUA booking? Data kendaraan tidak ikut terhapus."))return;const d=data();d.bookings=[];save(d);renderAll()}
+function changePass(){const old=document.getElementById("oldPass").value,nw=document.getElementById("newPass").value,current=localStorage.getItem(PASSKEY)||"gaeluwih";if(old!==current||!nw)return alert("Password lama salah atau password baru kosong.");localStorage.setItem(PASSKEY,nw);alert("Password berhasil diganti.");document.getElementById("oldPass").value="";document.getElementById("newPass").value=""}
+function backupJSON(){const blob=new Blob([JSON.stringify(data(),null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="gae-luwih-backup-"+new Date().toISOString().slice(0,10)+".json";a.click();URL.revokeObjectURL(a.href)}
+function restoreJSON(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.cars||!d.bikes||!d.bookings)throw Error();if(confirm("Ganti data browser saat ini dengan backup ini?")){save(d);renderAll();alert("Restore berhasil.")}}catch(err){alert("File backup tidak valid.")}};r.readAsText(f);e.target.value=""}
+function exportCSV(){
+ const d=data(),rows=[["ID","Nama","WhatsApp","Kendaraan","Jenis","Mulai","Selesai","Durasi","Total","Status","Catatan Admin","Dibuat"]];
+ d.bookings.forEach(x=>rows.push([x.id,x.name,x.phone,x.vehicle,x.type,x.start||"",x.end||"",x.duration,x.total,bookingStatus(x),x.notes||"",x.created||""]));
+ const csv=rows.map(row=>row.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+ const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="gae-luwih-bookings.csv";a.click();URL.revokeObjectURL(a.href)
+}
+function openModal(title,body){document.getElementById("modalTitle").textContent=title;document.getElementById("modalBody").innerHTML=body;document.getElementById("modal").classList.remove("hidden")}
+function closeModal(){document.getElementById("modal").classList.add("hidden")}
+function applyLanguage(lang){
+ currentLang=LANGS[lang]?lang:"id";const t=LANGS[currentLang];document.documentElement.lang=currentLang;localStorage.setItem("gae_luwih_lang",currentLang);
+ const map={headerSub:t.sub,loginTitle:t.login,loginInfo:t.loginInfo,passwordLabel:t.password,loginBtn:t.enter,dashboardTitle:t.dashboard,siteBtn:t.site,refreshBtn:t.refresh,logoutBtn:t.logout,tabDashboard:t.dashTab,tabBookings:t.bookTab,tabVehicles:t.vehTab,tabSettings:t.setTab,recentTitle:t.recent,allBookingsBtn:t.all,summaryTitle:t.summary,bookingTitle:t.manageBook,exportBtn:t.export,vehicleTitle:t.manageVeh,addVehicleBtn:t.addVeh,passwordTitle:t.changePass,changePassBtn:t.change,dataTitle:t.data,backupBtn:t.backup,restoreBtn:t.restore,clearBtn:t.clear,productionNotice:t.notice};
+ Object.entries(map).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.textContent=val});
+ document.getElementById("oldPass").placeholder=t.oldPass;document.getElementById("newPass").placeholder=t.newPass;document.getElementById("searchBooking").placeholder=t.search;
+ document.getElementById("filterStatus").innerHTML=`<option value="all">${t.allStatus}</option><option value="new">${t.new}</option><option value="confirmed">${t.confirmed}</option><option value="completed">${t.completed}</option><option value="cancelled">${t.cancelled}</option>`;
+ document.getElementById("filterType").innerHTML=`<option value="all">${t.allVehicles}</option><option value="car">${t.cars}</option><option value="bike">${t.bikes}</option>`;
+ const s=document.getElementById("languageSelect");if(s)s.value=currentLang;
+ renderAll();
+}
+document.getElementById("languageSelect").addEventListener("change",e=>applyLanguage(e.target.value));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+window.addEventListener("storage",()=>renderAll());
+
+if(sessionStorage.getItem("gae_admin")==="1")show();
+</script>
+</body>
+</html>
