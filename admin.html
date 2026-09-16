@@ -167,7 +167,11 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
 </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL="https://rwgshjeqxirxyagntufv.supabase.co";
+const SUPABASE_KEY="sb_publishable_aXI3jINyGZmliY18ByS_OA__dveNRbz";
+const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const KEY="gae_luwih_data_v1", PASSKEY="gae_luwih_admin_pass";
 const defaults={
 cars:[
@@ -190,135 +194,4 @@ zh:{sub:"管理车辆、预订和业务概览",login:"🔐 管理员登录",logi
 ja:{sub:"車両、予約、業務概要を管理",login:"🔐 管理者ログイン",loginInfo:"デモの初期パスワード：gaeluwih。現在はオンラインDBではなくブラウザのlocalStorageを使用しています。",password:"パスワード",enter:"ログイン",dashboard:"ダッシュボード",site:"🌐 Webサイト",refresh:"↻ 更新",logout:"ログアウト",dashTab:"📊 ダッシュボード",bookTab:"📋 予約",vehTab:"🚗 車両",setTab:"⚙️ 設定",recent:"最近の予約",all:"すべて表示",summary:"車両概要",manageBook:"予約管理",export:"⬇ CSV出力",search:"名前、WhatsApp、車両を検索...",allStatus:"すべてのステータス",allVehicles:"すべての車両",cars:"車",bikes:"バイク",new:"新規",confirmed:"確認済み",completed:"完了",cancelled:"キャンセル",manageVeh:"車両管理",addVeh:"＋ 車両を追加",changePass:"🔐 管理者パスワード変更",oldPass:"現在のパスワード",newPass:"新しいパスワード",change:"変更",data:"💾 予約データ",dataInfo:"データを削除する前にバックアップしてください。車両と予約をJSONで保存します。",backup:"⬇ JSONバックアップ",restore:"⬆ JSON復元",clear:"すべての予約を削除",notice:"注意：このバージョンはブラウザのlocalStorageを使用します。管理者/予約データはサーバーに保存されず、端末間で自動同期されません。実運用にはDBとバックエンド認証が必要です。",available:"利用可能",rented:"貸出中",edit:"編集",delete:"削除",wa:"WhatsApp",status:"ステータス",type:"種類",price:"料金",actions:"操作",name:"名前",phone:"WhatsApp",vehicle:"車両",period:"期間",total:"合計",created:"作成",noBooking:"予約はありません。",save:"保存",cancel:"キャンセル",add:"追加",vehicleName:"車両名",vehiclePrice:"料金",vehicleStatus:"状態",bookingEdit:"予約を編集",notes:"管理者メモ"},
 ko:{sub:"차량, 예약 및 사업 요약 관리",login:"🔐 관리자 로그인",loginInfo:"데모 기본 비밀번호: gaeluwih. 현재 온라인 데이터베이스가 아닌 브라우저 localStorage를 사용합니다.",password:"비밀번호",enter:"로그인",dashboard:"대시보드",site:"🌐 웹사이트",refresh:"↻ 새로고침",logout:"로그아웃",dashTab:"📊 대시보드",bookTab:"📋 예약",vehTab:"🚗 차량",setTab:"⚙️ 설정",recent:"최근 예약",all:"전체 보기",summary:"차량 요약",manageBook:"예약 관리",export:"⬇ CSV 내보내기",search:"이름, WhatsApp, 차량 검색...",allStatus:"모든 상태",allVehicles:"모든 차량",cars:"자동차",bikes:"오토바이",new:"신규",confirmed:"확정",completed:"완료",cancelled:"취소",manageVeh:"차량 관리",addVeh:"＋ 차량 추가",changePass:"🔐 관리자 비밀번호 변경",oldPass:"기존 비밀번호",newPass:"새 비밀번호",change:"변경",data:"💾 예약 데이터",dataInfo:"데이터 삭제 전에 백업하세요. 차량과 예약을 JSON으로 저장합니다.",backup:"⬇ JSON 백업",restore:"⬆ JSON 복원",clear:"모든 예약 삭제",notice:"참고: 이 버전은 브라우저 localStorage를 사용합니다. 관리자/예약 데이터는 서버에 저장되지 않으며 기기 간 자동 동기화도 되지 않습니다. 실제 다중 관리자 운영에는 DB와 백엔드 인증이 필요합니다.",available:"이용 가능",rented:"대여 중",edit:"편집",delete:"삭제",wa:"WhatsApp",status:"상태",type:"종류",price:"가격",actions:"작업",name:"이름",phone:"WhatsApp",vehicle:"차량",period:"기간",total:"총액",created:"생성",noBooking:"예약이 없습니다.",save:"저장",cancel:"취소",add:"추가",vehicleName:"차량명",vehiclePrice:"가격",vehicleStatus:"상태",bookingEdit:"예약 편집",notes:"관리자 메모"},
 de:{sub:"Fahrzeuge, Buchungen und Geschäftsübersicht verwalten",login:"🔐 Admin-Login",loginInfo:"Demo-Standardpasswort: gaeluwih. Diese Seite verwendet derzeit Browser-localStorage, keine Online-Datenbank.",password:"Passwort",enter:"Anmelden",dashboard:"Dashboard",site:"🌐 Website",refresh:"↻ Aktualisieren",logout:"Abmelden",dashTab:"📊 Dashboard",bookTab:"📋 Buchungen",vehTab:"🚗 Fahrzeuge",setTab:"⚙️ Einstellungen",recent:"Neueste Buchungen",all:"Alle anzeigen",summary:"Fahrzeugübersicht",manageBook:"Buchungsverwaltung",export:"⬇ CSV exportieren",search:"Name, WhatsApp oder Fahrzeug suchen...",allStatus:"Alle Status",allVehicles:"Alle Fahrzeuge",cars:"Autos",bikes:"Motorräder",new:"Neu",confirmed:"Bestätigt",completed:"Abgeschlossen",cancelled:"Storniert",manageVeh:"Fahrzeugverwaltung",addVeh:"＋ Fahrzeug hinzufügen",changePass:"🔐 Admin-Passwort ändern",oldPass:"Altes Passwort",newPass:"Neues Passwort",change:"Passwort ändern",data:"💾 Buchungsdaten",dataInfo:"Vor dem Löschen eine Sicherung erstellen. Die Sicherung enthält Fahrzeuge und Buchungen als JSON.",backup:"⬇ JSON sichern",restore:"⬆ JSON wiederherstellen",clear:"Alle Buchungen löschen",notice:"Hinweis: Diese Version verwendet Browser-localStorage. Admin-/Buchungsdaten werden nicht auf einem Server gespeichert und nicht zwischen Geräten synchronisiert. Für den echten Mehrbenutzerbetrieb werden Datenbank und Backend-Authentifizierung benötigt.",available:"Verfügbar",rented:"Vermietet",edit:"Bearbeiten",delete:"Löschen",wa:"WhatsApp",status:"Status",type:"Typ",price:"Preis",actions:"Aktionen",name:"Name",phone:"WhatsApp",vehicle:"Fahrzeug",period:"Zeitraum",total:"Gesamt",created:"Erstellt",noBooking:"Noch keine Buchungen.",save:"Speichern",cancel:"Abbrechen",add:"Hinzufügen",vehicleName:"Fahrzeugname",vehiclePrice:"Preis",vehicleStatus:"Status",bookingEdit:"Buchung bearbeiten",notes:"Admin-Notiz"},
-fr:{sub:"Gérer les véhicules, réservations et résumé d'activité",login:"🔐 Connexion Admin",loginInfo:"Mot de passe démo par défaut : gaeluwih. Cette page utilise encore le localStorage du navigateur, pas une base de données en ligne.",password:"Mot de passe",enter:"Connexion",dashboard:"Tableau de bord",site:"🌐 Site web",refresh:"↻ Actualiser",logout:"Déconnexion",dashTab:"📊 Tableau de bord",bookTab:"📋 Réservations",vehTab:"🚗 Véhicules",setTab:"⚙️ Paramètres",recent:"Réservations récentes",all:"Voir tout",summary:"Résumé des véhicules",manageBook:"Gestion des réservations",export:"⬇ Exporter CSV",search:"Rechercher nom, WhatsApp, véhicule...",allStatus:"Tous les statuts",allVehicles:"Tous les véhicules",cars:"Voitures",bikes:"Motos",new:"Nouveau",confirmed:"Confirmée",completed:"Terminée",cancelled:"Annulée",manageVeh:"Gestion des véhicules",addVeh:"＋ Ajouter un véhicule",changePass:"🔐 Changer le mot de passe Admin",oldPass:"Ancien mot de passe",newPass:"Nouveau mot de passe",change:"Changer",data:"💾 Données des réservations",dataInfo:"Faites une sauvegarde avant de supprimer. La sauvegarde contient véhicules et réservations en JSON.",backup:"⬇ Sauvegarde JSON",restore:"⬆ Restaurer JSON",clear:"Supprimer toutes les réservations",notice:"Note : cette version utilise le localStorage du navigateur. Les données ne sont pas stockées sur un serveur et ne sont pas synchronisées entre appareils. Une base de données et une authentification backend sont nécessaires pour un usage réel multi-admin.",available:"Disponible",rented:"Loué",edit:"Modifier",delete:"Supprimer",wa:"WhatsApp",status:"Statut",type:"Type",price:"Prix",actions:"Actions",name:"Nom",phone:"WhatsApp",vehicle:"Véhicule",period:"Période",total:"Total",created:"Créée",noBooking:"Aucune réservation.",save:"Enregistrer",cancel:"Annuler",add:"Ajouter",vehicleName:"Nom du véhicule",vehiclePrice:"Prix",vehicleStatus:"Statut",bookingEdit:"Modifier la réservation",notes:"Note admin"},
-es:{sub:"Gestiona vehículos, reservas y resumen del negocio",login:"🔐 Acceso de administrador",loginInfo:"Contraseña demo predeterminada: gaeluwih. Esta página usa localStorage del navegador, no una base de datos online.",password:"Contraseña",enter:"Entrar",dashboard:"Panel",site:"🌐 Sitio web",refresh:"↻ Actualizar",logout:"Salir",dashTab:"📊 Panel",bookTab:"📋 Reservas",vehTab:"🚗 Vehículos",setTab:"⚙️ Ajustes",recent:"Reservas recientes",all:"Ver todas",summary:"Resumen de vehículos",manageBook:"Gestión de reservas",export:"⬇ Exportar CSV",search:"Buscar nombre, WhatsApp, vehículo...",allStatus:"Todos los estados",allVehicles:"Todos los vehículos",cars:"Coches",bikes:"Motos",new:"Nueva",confirmed:"Confirmada",completed:"Completada",cancelled:"Cancelada",manageVeh:"Gestión de vehículos",addVeh:"＋ Añadir vehículo",changePass:"🔐 Cambiar contraseña de administrador",oldPass:"Contraseña anterior",newPass:"Nueva contraseña",change:"Cambiar",data:"💾 Datos de reservas",dataInfo:"Haz una copia antes de borrar. La copia guarda vehículos y reservas en JSON.",backup:"⬇ Copia JSON",restore:"⬆ Restaurar JSON",clear:"Eliminar todas las reservas",notice:"Nota: esta versión usa localStorage del navegador. Los datos no se guardan en un servidor ni se sincronizan automáticamente entre dispositivos. Para uso real multiadministrador se necesitan base de datos y autenticación backend.",available:"Disponible",rented:"Alquilado",edit:"Editar",delete:"Eliminar",wa:"WhatsApp",status:"Estado",type:"Tipo",price:"Precio",actions:"Acciones",name:"Nombre",phone:"WhatsApp",vehicle:"Vehículo",period:"Periodo",total:"Total",created:"Creada",noBooking:"No hay reservas.",save:"Guardar",cancel:"Cancelar",add:"Añadir",vehicleName:"Nombre del vehículo",vehiclePrice:"Precio",vehicleStatus:"Estado",bookingEdit:"Editar reserva",notes:"Nota del administrador"}
-};
-
-let currentLang=localStorage.getItem("gae_luwih_lang")||"id";
-let activeTab="dashboard";
-
-function cloneDefaults(){return JSON.parse(JSON.stringify(defaults))}
-function data(){
- try{
-  const raw=localStorage.getItem(KEY);
-  if(!raw){const d=cloneDefaults();save(d);return d}
-  const d=JSON.parse(raw);
-  d.cars=d.cars||[];d.bikes=d.bikes||[];d.bookings=d.bookings||[];
-  return d;
- }catch(e){return cloneDefaults()}
-}
-function save(d){localStorage.setItem(KEY,JSON.stringify(d))}
-function rp(n){return new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0)}
-function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
-function typeLabel(t){return t==="car"?LANGS[currentLang].cars:LANGS[currentLang].bikes}
-function statusLabel(s){const t=LANGS[currentLang];return s==="confirmed"?t.confirmed:s==="completed"?t.completed:s==="cancelled"?t.cancelled:t.new}
-function statusClass(s){return s==="confirmed"?"confirmed":s==="completed"?"completed":s==="cancelled"?"cancelled":"new"}
-function bookingStatus(x){return x.status||"new"}
-
-function login(){
- const p=document.getElementById("pass").value;
- if(p===(localStorage.getItem(PASSKEY)||"gaeluwih")){sessionStorage.setItem("gae_admin","1");show()}
- else document.getElementById("err").textContent=currentLang==="id"?"Password salah.":"Incorrect password.";
-}
-function show(){document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");applyLanguage(currentLang);renderAll()}
-function logout(){sessionStorage.removeItem("gae_admin");location.reload()}
-function refreshData(){renderAll()}
-function switchTab(tab){
- activeTab=tab;
- ["dashboard","bookings","vehicles","settings"].forEach(x=>document.getElementById(x+"Section").classList.toggle("hidden",x!==tab));
- ["tabDashboard","tabBookings","tabVehicles","tabSettings"].forEach(x=>document.getElementById(x).classList.remove("on"));
- document.getElementById("tab"+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add("on");
- if(tab==="bookings")renderBookings();
- if(tab==="vehicles")renderVehicles();
-}
-function renderAll(){renderStats();renderRecent();renderVehicleSummary();renderBookings();renderVehicles();document.getElementById("lastUpdated").textContent=new Date().toLocaleString(currentLang==="id"?"id-ID":currentLang)}
-function renderStats(){
- const d=data(),all=[...d.cars,...d.bikes],books=d.bookings;
- const revenue=books.filter(b=>bookingStatus(b)!=="cancelled").reduce((s,b)=>s+Number(b.total||0),0);
- const pending=books.filter(b=>bookingStatus(b)==="new").length;
- document.getElementById("stats").innerHTML=[
-  ["Kendaraan",all.length],["Tersedia",all.filter(v=>v.status==="Tersedia").length],["Booking",books.length],["Menunggu",pending],["Nilai Booking",rp(revenue)]
- ].map(x=>`<div class="stat"><div class="muted">${x[0]}</div><div class="num">${x[1]}</div></div>`).join("");
-}
-function renderRecent(){
- const b=data().bookings.slice().sort((a,b)=>(new Date(b.created||0))-(new Date(a.created||0))).slice(0,5);
- document.getElementById("recentBookings").innerHTML=b.length?`<div class="tablewrap"><table><thead><tr><th>${LANGS[currentLang].name}</th><th>${LANGS[currentLang].vehicle}</th><th>${LANGS[currentLang].period}</th><th>${LANGS[currentLang].total}</th><th>${LANGS[currentLang].status}</th></tr></thead><tbody>${b.map(x=>`<tr><td>${esc(x.name)}<br><span class="muted">${esc(x.phone)}</span></td><td>${esc(x.vehicle)}<br><span class="muted">${typeLabel(x.type)}</span></td><td>${esc(x.start||"")}${x.end?" → "+esc(x.end):""}<br>${esc(x.duration)} ${x.type==="car"?"hari":"bulan"}</td><td>${rp(x.total)}</td><td><span class="badge ${statusClass(bookingStatus(x))}">${statusLabel(bookingStatus(x))}</span></td></tr>`).join("")}</tbody></table></div>`:`<p class="muted">${LANGS[currentLang].noBooking}</p>`;
-}
-function renderVehicleSummary(){
- const d=data(),all=[...d.cars.map(x=>({...x,type:"car"})),...d.bikes.map(x=>({...x,type:"bike"}))];
- document.getElementById("vehicleSummary").innerHTML=all.map(v=>`<div class="stat"><b>${esc(v.name)}</b><div class="muted">${typeLabel(v.type)}</div><div class="${v.status==="Tersedia"?"ok":"busy"}">${v.status==="Tersedia"?"● "+LANGS[currentLang].available:"● "+LANGS[currentLang].rented}</div></div>`).join("");
-}
-function renderBookings(){
- const d=data(),q=(document.getElementById("searchBooking")?.value||"").toLowerCase().trim(),fs=document.getElementById("filterStatus")?.value||"all",ft=document.getElementById("filterType")?.value||"all";
- let b=d.bookings.filter(x=>{
-  const hay=[x.name,x.phone,x.vehicle,x.start,x.end].join(" ").toLowerCase();
-  return (!q||hay.includes(q))&&(fs==="all"||bookingStatus(x)===fs)&&(ft==="all"||x.type===ft)
- }).sort((a,b)=>(new Date(b.created||0))-(new Date(a.created||0)));
- document.getElementById("bookings").innerHTML=b.length?`<div class="tablewrap"><table><thead><tr><th>${LANGS[currentLang].name}</th><th>${LANGS[currentLang].vehicle}</th><th>${LANGS[currentLang].period}</th><th>${LANGS[currentLang].total}</th><th>${LANGS[currentLang].status}</th><th>${LANGS[currentLang].actions}</th></tr></thead><tbody>${b.map(x=>`<tr><td><b>${esc(x.name)}</b><br>${esc(x.phone)}</td><td>${esc(x.vehicle)}<br><span class="muted">${typeLabel(x.type)}</span></td><td>${esc(x.start||"")}${x.end?" → "+esc(x.end):""}<br>${esc(x.duration)} ${x.type==="car"?"hari":"bulan"}</td><td><b>${rp(x.total)}</b></td><td><span class="badge ${statusClass(bookingStatus(x))}">${statusLabel(bookingStatus(x))}</span></td><td><button class="smallbtn blue" onclick="editBooking(${x.id})">${LANGS[currentLang].edit}</button><button class="smallbtn green" onclick="wa(${x.id})">${LANGS[currentLang].wa}</button><button class="smallbtn danger" onclick="deleteBooking(${x.id})">${LANGS[currentLang].delete}</button></td></tr>`).join("")}</tbody></table></div>`:`<p class="muted">${LANGS[currentLang].noBooking}</p>`;
-}
-function renderVehicles(){
- const d=data(),all=[...d.cars.map(x=>({...x,type:"car"})),...d.bikes.map(x=>({...x,type:"bike"}))];
- document.getElementById("vehicles").innerHTML=all.map(v=>`<div class="vehicle">
- <h3>${esc(v.name)}</h3><div class="muted">${typeLabel(v.type)}</div>
- <div class="price">${rp(v.price)} / ${v.type==="car"?"hari":"bulan"}</div>
- <div class="${v.status==="Tersedia"?"ok":"busy"}">${v.status==="Tersedia"?"● "+LANGS[currentLang].available:"● "+LANGS[currentLang].rented}</div><br>
- <div class="actions">
- <button class="smallbtn" onclick="toggleStatus('${v.id}','${v.type}')">${LANGS[currentLang].status}</button>
- <button class="smallbtn secondary" onclick="editVehicle('${v.id}','${v.type}')">${LANGS[currentLang].edit}</button>
- <button class="smallbtn danger" onclick="deleteVehicle('${v.id}','${v.type}')">${LANGS[currentLang].delete}</button>
- </div></div>`).join("");
-}
-function findVehicle(id,t){const d=data();return (t==="car"?d.cars:d.bikes).find(x=>x.id===id)}
-function toggleStatus(id,t){const d=data(),v=findVehicle(id,t);if(!v)return;v.status=v.status==="Tersedia"?"Disewa":"Tersedia";save(d);renderAll()}
-function editVehicle(id,t){
- const v=findVehicle(id,t);if(!v)return;
- openModal(LANGS[currentLang].edit+" "+LANGS[currentLang].vehicleName,`<label>${LANGS[currentLang].vehicleName}</label><input id="mName" value="${esc(v.name)}"><br><label>${LANGS[currentLang].vehiclePrice}</label><input id="mPrice" type="number" value="${Number(v.price)}"><br><label>${LANGS[currentLang].vehicleStatus}</label><select id="mStatus"><option ${v.status==="Tersedia"?"selected":""}>Tersedia</option><option ${v.status==="Disewa"?"selected":""}>Disewa</option></select><br><div class="actions"><button onclick="saveVehicleEdit('${id}','${t}')">${LANGS[currentLang].save}</button><button class="secondary" onclick="closeModal()">${LANGS[currentLang].cancel}</button></div>`);
-}
-function saveVehicleEdit(id,t){const d=data(),v=findVehicle(id,t),n=document.getElementById("mName").value.trim(),p=Number(document.getElementById("mPrice").value),s=document.getElementById("mStatus").value;if(!v||!n||p<=0)return alert("Data tidak valid.");v.name=n;v.price=p;v.status=s;save(d);closeModal();renderAll()}
-function openAddVehicle(){
- openModal(LANGS[currentLang].addVeh,`<label>${LANGS[currentLang].vehicleName}</label><input id="mName" placeholder="${LANGS[currentLang].vehicleName}"><br><label>${LANGS[currentLang].type}</label><select id="mType"><option value="car">${LANGS[currentLang].cars}</option><option value="bike">${LANGS[currentLang].bikes}</option></select><br><label>${LANGS[currentLang].vehiclePrice}</label><input id="mPrice" type="number" placeholder="350000"><br><label>${LANGS[currentLang].vehicleStatus}</label><select id="mStatus"><option>Tersedia</option><option>Disewa</option></select><br><div class="actions"><button class="green" onclick="saveNewVehicle()">${LANGS[currentLang].add}</button><button class="secondary" onclick="closeModal()">${LANGS[currentLang].cancel}</button></div>`);
-}
-function saveNewVehicle(){const d=data(),n=document.getElementById("mName").value.trim(),t=document.getElementById("mType").value,p=Number(document.getElementById("mPrice").value),s=document.getElementById("mStatus").value;if(!n||p<=0)return alert("Isi nama dan harga.");(t==="car"?d.cars:d.bikes).push({id:t+Date.now(),name:n,price:p,status:s});save(d);closeModal();renderAll()}
-function deleteVehicle(id,t){if(!confirm("Hapus kendaraan ini?"))return;const d=data();const k=t==="car"?"cars":"bikes";d[k]=d[k].filter(x=>x.id!==id);save(d);renderAll()}
-function editBooking(id){
- const x=data().bookings.find(b=>b.id===id);if(!x)return;
- const st=bookingStatus(x);
- openModal(LANGS[currentLang].bookingEdit,`
- <div class="row"><div><label>${LANGS[currentLang].name}</label><input id="bName" value="${esc(x.name)}"></div><div><label>${LANGS[currentLang].phone}</label><input id="bPhone" value="${esc(x.phone)}"></div></div>
- <br><label>${LANGS[currentLang].status}</label><select id="bStatus"><option value="new" ${st==="new"?"selected":""}>${LANGS[currentLang].new}</option><option value="confirmed" ${st==="confirmed"?"selected":""}>${LANGS[currentLang].confirmed}</option><option value="completed" ${st==="completed"?"selected":""}>${LANGS[currentLang].completed}</option><option value="cancelled" ${st==="cancelled"?"selected":""}>${LANGS[currentLang].cancelled}</option></select>
- <br><label>${LANGS[currentLang].notes}</label><textarea id="bNotes">${esc(x.notes||"")}</textarea>
- <br><div class="actions"><button onclick="saveBookingEdit(${id})">${LANGS[currentLang].save}</button><button class="secondary" onclick="closeModal()">${LANGS[currentLang].cancel}</button></div>`);
-}
-function saveBookingEdit(id){const d=data(),x=d.bookings.find(b=>b.id===id);if(!x)return;x.name=document.getElementById("bName").value.trim();x.phone=document.getElementById("bPhone").value.trim();x.status=document.getElementById("bStatus").value;x.notes=document.getElementById("bNotes").value.trim();save(d);closeModal();renderAll()}
-function deleteBooking(id){if(!confirm("Hapus booking ini?"))return;const d=data();d.bookings=d.bookings.filter(x=>x.id!==id);save(d);renderAll()}
-function wa(id){const x=data().bookings.find(b=>b.id===id);if(!x)return;let n=String(x.phone||"").replace(/\D/g,"");if(n.startsWith("0"))n="62"+n.slice(1);const msg=`Halo ${x.name||""}, ini GAE Luwih Rental terkait booking ${x.vehicle||""}.`;window.open("https://wa.me/"+n+"?text="+encodeURIComponent(msg),"_blank")}
-function clearBookings(){if(!confirm("Hapus SEMUA booking? Data kendaraan tidak ikut terhapus."))return;const d=data();d.bookings=[];save(d);renderAll()}
-function changePass(){const old=document.getElementById("oldPass").value,nw=document.getElementById("newPass").value,current=localStorage.getItem(PASSKEY)||"gaeluwih";if(old!==current||!nw)return alert("Password lama salah atau password baru kosong.");localStorage.setItem(PASSKEY,nw);alert("Password berhasil diganti.");document.getElementById("oldPass").value="";document.getElementById("newPass").value=""}
-function backupJSON(){const blob=new Blob([JSON.stringify(data(),null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="gae-luwih-backup-"+new Date().toISOString().slice(0,10)+".json";a.click();URL.revokeObjectURL(a.href)}
-function restoreJSON(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.cars||!d.bikes||!d.bookings)throw Error();if(confirm("Ganti data browser saat ini dengan backup ini?")){save(d);renderAll();alert("Restore berhasil.")}}catch(err){alert("File backup tidak valid.")}};r.readAsText(f);e.target.value=""}
-function exportCSV(){
- const d=data(),rows=[["ID","Nama","WhatsApp","Kendaraan","Jenis","Mulai","Selesai","Durasi","Total","Status","Catatan Admin","Dibuat"]];
- d.bookings.forEach(x=>rows.push([x.id,x.name,x.phone,x.vehicle,x.type,x.start||"",x.end||"",x.duration,x.total,bookingStatus(x),x.notes||"",x.created||""]));
- const csv=rows.map(row=>row.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n");
- const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="gae-luwih-bookings.csv";a.click();URL.revokeObjectURL(a.href)
-}
-function openModal(title,body){document.getElementById("modalTitle").textContent=title;document.getElementById("modalBody").innerHTML=body;document.getElementById("modal").classList.remove("hidden")}
-function closeModal(){document.getElementById("modal").classList.add("hidden")}
-function applyLanguage(lang){
- currentLang=LANGS[lang]?lang:"id";const t=LANGS[currentLang];document.documentElement.lang=currentLang;localStorage.setItem("gae_luwih_lang",currentLang);
- const map={headerSub:t.sub,loginTitle:t.login,loginInfo:t.loginInfo,passwordLabel:t.password,loginBtn:t.enter,dashboardTitle:t.dashboard,siteBtn:t.site,refreshBtn:t.refresh,logoutBtn:t.logout,tabDashboard:t.dashTab,tabBookings:t.bookTab,tabVehicles:t.vehTab,tabSettings:t.setTab,recentTitle:t.recent,allBookingsBtn:t.all,summaryTitle:t.summary,bookingTitle:t.manageBook,exportBtn:t.export,vehicleTitle:t.manageVeh,addVehicleBtn:t.addVeh,passwordTitle:t.changePass,changePassBtn:t.change,dataTitle:t.data,backupBtn:t.backup,restoreBtn:t.restore,clearBtn:t.clear,productionNotice:t.notice};
- Object.entries(map).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.textContent=val});
- document.getElementById("oldPass").placeholder=t.oldPass;document.getElementById("newPass").placeholder=t.newPass;document.getElementById("searchBooking").placeholder=t.search;
- document.getElementById("filterStatus").innerHTML=`<option value="all">${t.allStatus}</option><option value="new">${t.new}</option><option value="confirmed">${t.confirmed}</option><option value="completed">${t.completed}</option><option value="cancelled">${t.cancelled}</option>`;
- document.getElementById("filterType").innerHTML=`<option value="all">${t.allVehicles}</option><option value="car">${t.cars}</option><option value="bike">${t.bikes}</option>`;
- const s=document.getElementById("languageSelect");if(s)s.value=currentLang;
- renderAll();
-}
-document.getElementById("languageSelect").addEventListener("change",e=>applyLanguage(e.target.value));
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
-window.addEventListener("storage",()=>renderAll());
-
-if(sessionStorage.getItem("gae_admin")==="1")show();
-</script>
-</body>
-</html>
+fr:{sub:"Gérer les véhicules, réservations et résumé d'activité",login:"🔐 Connexion Admin",loginInfo:"Mot de passe démo par défaut : gaeluwih. Cette page utilise encore le localStorage du navigateur, pas une base de données en ligne.",password:"Mot de passe",enter:"Connexion",dashboard:"Tableau de bord",site:"🌐 Site web",refresh:"↻ Actualiser",logout:"Déconnexion",dashTab:"📊 Tableau de bord",bookTab:"📋 Réservations",vehTab:"🚗 Véhicules",setTab:"⚙️ Paramètres",recent:"Réservations récentes",all:"Voir tout",summary:"Résumé des véhicules",manageBook:"Gestion des réservations",export:"⬇ Exporter CSV",search:"Rechercher nom, WhatsApp, véhicule...",allStatus:"Tous les statuts",allVehicles:"Tous les véhicules",cars:"Voitures",bikes:"Motos",new:"Nouveau",confirmed:"Confirmée",completed:"Terminée",cancelled:"Annulée",manageVeh:"Gestion des véhicules",addVeh:"＋ Ajouter un véhicule",changePass:"🔐 Changer le mot de passe Admin",oldPass:"Ancien mot de passe",newPass:"Nouveau mot de passe",change:"Changer",data:"💾 Données des réservations",dataInfo:"Faites une sauvegarde avant de supprimer
