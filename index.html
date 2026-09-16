@@ -70,7 +70,7 @@ async function loadVehicles(){
         if(["rented","disewa","rent","rental"].includes(s)) return "Disewa";
         return s ? String(v.status).trim() : "Tersedia";
       };
-      const normalize = v => ({id:String(v.id),name:String(v.name||v.vehicle||""),price:Number(v.price)||0,status:normalizeStatus(v),type:String(v.type||v.category||"").toLowerCase()});
+      const normalize = v => ({id:String(v.id),name:String(v.name||v.vehicle||""),price:Number(v.Price ?? v.price ?? 0)||0,status:normalizeStatus(v),type:String(v.type||v.category||"").toLowerCase()});
       const rows=data.map(normalize);
       const cars=rows.filter(v=>v.type==="car"||v.type==="mobil"||/raize|brio|agya|ayla|avanza|fortuner/i.test(v.name));
       const bikes=rows.filter(v=>v.type==="bike"||v.type==="motor"||/nmax|x-max|x max/i.test(v.name));
